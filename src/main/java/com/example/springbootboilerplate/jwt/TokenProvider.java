@@ -1,5 +1,7 @@
 package com.example.springbootboilerplate.jwt;
 
+import com.example.springbootboilerplate.base.GeneralException;
+import com.example.springbootboilerplate.base.constant.Code;
 import com.example.springbootboilerplate.jwt.dto.TokenDto;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -79,7 +81,7 @@ public class TokenProvider {
         Claims claims = parseClaims(accessToken);
 
         if (claims.get(AUTHROITIES_KEY) == null) {
-            throw new RuntimeException("권한 정보가 없는 토큰입니다.");
+            throw new GeneralException(Code.JWT_WITHOUT_AUTHORITY, "권한 정보가 없는 토큰입니다.");
         }
 
         // 클레임에서 권한 정보 가져오기
@@ -108,7 +110,7 @@ public class TokenProvider {
             log.info("JWT 토큰이 잘못되었습니다.");
         }
 
-        return  false;
+        return false;
     }
 
     // 토큰 정보 검증

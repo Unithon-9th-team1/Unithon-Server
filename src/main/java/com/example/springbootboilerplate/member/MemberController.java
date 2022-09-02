@@ -1,5 +1,7 @@
 package com.example.springbootboilerplate.member;
 
+import com.example.springbootboilerplate.base.dto.DataResponseDto;
+import com.example.springbootboilerplate.member.domain.Member;
 import com.example.springbootboilerplate.member.dto.MemberResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +17,17 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("/me")
-    public ResponseEntity<MemberResponseDto> getMyMemberInfo() {
-        return ResponseEntity.ok(memberService.getMyInfo());
+    public DataResponseDto<Object> getMyMemberInfo() {
+        return DataResponseDto.of(memberService.getMyInfo());
     }
 
     @GetMapping("/{email}")
-    public ResponseEntity<MemberResponseDto> getMemberInfo(@PathVariable String email) {
-        return ResponseEntity.ok(memberService.getMemberInfo(email));
+    public DataResponseDto<Object> getMemberInfo(@PathVariable String email) {
+        return DataResponseDto.of(memberService.getMemberInfo(email));
+    }
+
+    @GetMapping("/test/{id}")
+    public DataResponseDto<Object> test(@PathVariable long id) {
+        return DataResponseDto.of(memberService.getMember(id));
     }
 }

@@ -1,5 +1,6 @@
 package com.example.springbootboilerplate.auth;
 
+import com.example.springbootboilerplate.base.dto.DataResponseDto;
 import com.example.springbootboilerplate.jwt.dto.TokenDto;
 import com.example.springbootboilerplate.jwt.dto.TokenRequestDto;
 import com.example.springbootboilerplate.member.dto.MemberRequestDto;
@@ -19,19 +20,19 @@ public class AuthController {
 
     // 회원가입
     @PostMapping("/sign-up")
-    public ResponseEntity<MemberResponseDto> signUp(@RequestBody MemberRequestDto memberRequestDto) {
-        return ResponseEntity.ok(authService.signUp(memberRequestDto));
+    public DataResponseDto<Object> signUp(@RequestBody MemberRequestDto memberRequestDto) {
+        return DataResponseDto.of(authService.signUp(memberRequestDto));
     }
 
     // 로그인
     @PostMapping("/log-in")
-    public ResponseEntity<TokenDto> logIn(@RequestBody MemberRequestDto memberRequestDto) {
-        return ResponseEntity.ok(authService.logIn(memberRequestDto));
+    public DataResponseDto<Object> logIn(@RequestBody MemberRequestDto memberRequestDto) {
+        return DataResponseDto.of(authService.logIn(memberRequestDto));
     }
 
     // 재발급
     @PostMapping("/reissue")
-    public ResponseEntity<TokenDto> reissue(@RequestBody TokenRequestDto tokenRequestDto) {
-        return ResponseEntity.ok(authService.reissue(tokenRequestDto));
+    public DataResponseDto<Object> reissue(@RequestBody TokenRequestDto tokenRequestDto) {
+        return DataResponseDto.of(authService.reissue(tokenRequestDto));
     }
 }

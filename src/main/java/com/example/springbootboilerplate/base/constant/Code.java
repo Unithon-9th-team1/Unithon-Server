@@ -11,7 +11,14 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum Code {
-    OK(0, HttpStatus.OK, "Ok"),
+    /**
+     1000번대: 요청 성공
+     2000번대: Request 오류
+     3000번대: Response 오류
+     4000번대: DB, Server 오류
+     5000번대: 인증(Security) 오류
+     **/
+    OK(1000, HttpStatus.OK, "Ok"),
 
     BAD_REQUEST(2000, HttpStatus.BAD_REQUEST, "Bad request"),
     VALIDATION_ERROR(2001, HttpStatus.BAD_REQUEST, "Validation error"),
@@ -28,13 +35,18 @@ public enum Code {
     UNAUTHORIZED(5000, HttpStatus.UNAUTHORIZED, "User unauthorized"),
     NOT_REGISTERED(5001, HttpStatus.OK, "Need registration"),
     ALREADY_REGISTERED(5002, HttpStatus.BAD_REQUEST, "You're already registered"),
-    INVALID_REFRESH_TOKEN(5003, HttpStatus.UNAUTHORIZED, "Invalid refresh token. Sign in again"),
-    REFRESH_TOKEN_NOT_FOUND(5004, HttpStatus.UNAUTHORIZED, "Refresh token not found. Sign in again"),
+    INVALID_REFRESH_TOKEN(5003, HttpStatus.UNAUTHORIZED, "Invalid refresh token."),
+    REFRESH_TOKEN_NOT_FOUND(5004, HttpStatus.UNAUTHORIZED, "Refresh token not found."),
     MALFORMED_JWT(5005, HttpStatus.UNAUTHORIZED, "Malformed jwt format"),
     EXPIRED_JWT(5006, HttpStatus.UNAUTHORIZED, "Jwt expired. Reissue it"),
     UNSUPPORTED_JWT(5007, HttpStatus.UNAUTHORIZED, "Unsupported jwt format"),
     ILLEGAL_JWT(5008, HttpStatus.UNAUTHORIZED, "Illegal jwt format"),
     FORBIDDEN(5009, HttpStatus.FORBIDDEN, "Forbidden"),
+
+    USER_LOGOUT(5010, HttpStatus.UNAUTHORIZED, "User logged out"),
+    JWT_INFO_DO_NOT_MATCH(5011, HttpStatus.UNAUTHORIZED, "User info do not match"),
+    JWT_WITHOUT_AUTHORITY(5012, HttpStatus.UNAUTHORIZED, "Token do not have Authority"),
+    INVALID_JWT_SIGNATURE(5013, HttpStatus.UNAUTHORIZED, "Invalid JWT signature")
     ;
 
 

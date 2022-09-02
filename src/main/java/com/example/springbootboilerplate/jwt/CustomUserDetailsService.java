@@ -1,5 +1,7 @@
 package com.example.springbootboilerplate.jwt;
 
+import com.example.springbootboilerplate.base.GeneralException;
+import com.example.springbootboilerplate.base.constant.Code;
 import com.example.springbootboilerplate.member.MemberRepository;
 import com.example.springbootboilerplate.member.domain.Member;
 import java.util.Collections;
@@ -23,7 +25,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return memberRepository.findByEmail(username)
             .map(this::createdUserDetails)
-            .orElseThrow(() -> new UsernameNotFoundException(username + "-> 데이터베이스에서 찾을 수 없습니다."));
+            .orElseThrow(() -> new GeneralException(Code.USER_NOT_FOUND, "DB에서 유저를 찾을 수 없습니다."));
     }
 
     // DB에 User 값이 존재한다면 UserDetails 객체로 만들어서 리턴
