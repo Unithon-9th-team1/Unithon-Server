@@ -10,15 +10,14 @@ public class RocketBookingRequestDto {
     private String rocketName;
     private String nickname;
     private String arrivalEnd;
-    private String arrivalTime;
-    private Integer seatId;
+    private String code;
 
     public Rocket toEntity(){
         return Rocket.builder()
                 .rocketName(rocketName)
                 .arrivalEnd(arrivalEnd)
-                .arrivalTime(arrivalTime)
                 .code("")
+                .boardingStatus(1) // 1. 탑승대기
                 .build();
     }
 }
