@@ -16,8 +16,8 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     @Transactional(readOnly = true)
-    public MemberResponseDto getMemberInfo(String email) {
-        return memberRepository.findByEmail(email)
+    public MemberResponseDto getMemberInfo(String nickname) {
+        return memberRepository.findByNickname(nickname)
             .map(MemberResponseDto::of)
             .orElseThrow(() -> new GeneralException(Code.USER_NOT_FOUND, "유저 정보가 없습니다."));
     }
@@ -28,11 +28,6 @@ public class MemberService {
         return memberRepository.findById(SecurityUtil.getCurrentMemberId())
             .map(MemberResponseDto::of)
             .orElseThrow(() -> new GeneralException(Code.USER_NOT_FOUND, "유저 정보가 없습니다."));
-    }
-
-    public Member getMember(long id) {
-        return memberRepository.findById(id)
-            .orElseThrow(() -> new GeneralException(Code.BAD_REQUEST, "Exception 테스트"));
     }
 
 }
