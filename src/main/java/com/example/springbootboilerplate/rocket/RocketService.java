@@ -12,11 +12,9 @@ import com.example.springbootboilerplate.rocket.dto.RocketBoardRequestDto;
 import com.example.springbootboilerplate.rocket.dto.RocketBookingRequestDto;
 import com.example.springbootboilerplate.rocket.dto.RocketResponseDto;
 
-import java.sql.Timestamp;
 import java.util.*;
 
 import lombok.RequiredArgsConstructor;
-import org.joda.time.DateTime;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
@@ -25,8 +23,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @EnableScheduling
 public class RocketService {
-
-
     private final RocketRepository rocketRepository;
     private final MemberRepository memberRepository;
     private final PassengerRepository passengerRepository;
@@ -103,7 +99,7 @@ public class RocketService {
         };
 
         Timer timer = new Timer("Timer");
-//        long delay = 259200000L;
+// long delay = 259200000L;
 // 1초에 1000m, 1분 60000ms;
 
         long delay = 10000L;

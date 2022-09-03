@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class RocketController {
     private final RocketService rocketService;
-    private final MemberService memberService;
 
     // 로켓 만들기
     @PostMapping("/rocket")
@@ -49,7 +48,7 @@ public class RocketController {
      * [GET] /rocket?nickname=(유저닉네임)
      */
     // uuid 로 바궈야하는것인지
-    @GetMapping("/rocket")
+    @GetMapping("/rockets")
     public DataResponseDto<Object> getMyRockets(@RequestParam(required = false) String nickname) {
         return DataResponseDto.of(Code.OK, rocketService.getMyRockets(nickname));
     }
