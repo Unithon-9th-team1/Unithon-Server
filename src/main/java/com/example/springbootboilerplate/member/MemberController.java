@@ -1,9 +1,8 @@
 package com.example.springbootboilerplate.member;
 
-import com.example.springbootboilerplate.base.dto.DataResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,4 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
     private final MemberService memberService;
 
+    @GetMapping("")
+    public void checkNickname(@RequestParam("nickname") String nickname){
+        memberService.confirmNickname(nickname);
+    }
 }
