@@ -42,4 +42,13 @@ public class RocketController {
             throw new GeneralException(Code.CONFLICT, "없는 닉네임입니다");
         return rocketService.boardRocket(rocketBoardRequest);
     }
+
+    /**
+     * 유저 로켓 목록 조회 API - 정연
+     * [GET] /rocket?nickname=(유저닉네임)
+     */
+    @GetMapping("/rocket")
+    public DataResponseDto<Object> getMyRockets(@RequestParam String nickname) {
+        return DataResponseDto.of(Code.OK, rocketService.getMyRockets(nickname));
+    }
 }
