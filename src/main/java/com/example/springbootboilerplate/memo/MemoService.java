@@ -12,7 +12,10 @@ import com.example.springbootboilerplate.rocket.RocketRepository;
 import com.example.springbootboilerplate.rocket.domain.Rocket;
 import com.example.springbootboilerplate.upload.S3FileUploadService;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -71,13 +74,22 @@ public class MemoService {
             ));
         }
 
-        // 도착 날짜 String to LocalDateTime
+        // 로켓 생성 일자
+        LocalDateTime createAt = rocketEntity.getCreatedAt();
+        DateTimeFormatter createAtFormatter = DateTimeFormatter.ofPattern("yyyy. MM. dd");
+        String formattedCreateAt = createAt.format(createAtFormatter);
+
+        // 로켓 도착 일자
         LocalDateTime arrivedAt = rocketEntity.getFinalArrival();
+        DateTimeFormatter arrivedFormatter = DateTimeFormatter.ofPattern("dd");
+        String formattedArrivedAt = arrivedAt.format(arrivedFormatter);
+
+        // 생성 일자 + 도착 일자 = 기간
+        String period = formattedCreateAt + " - " + formattedArrivedAt;
 
         return new MemoListResponseDto(
             rocketEntity.getRocketName(),
-            rocketEntity.getCreatedAt(),
-            arrivedAt,
+            period,
             memoResponseDtos
         );
     }
@@ -117,7 +129,7 @@ public class MemoService {
             randList.add(randomNum);
         }
 
-        // 3. 날짜마다 필터링 달라지는 로직을 만들어
+        // 3. 필터링 달라지는 로직을 만들어
         // 단어 > *
         List<String> splittedTextCopy = new ArrayList<>(splittedText);
         for (Integer ran : randList) {
@@ -130,7 +142,19 @@ public class MemoService {
 
         String filteredDescription = String.join(" ", splittedText);
 
+        // 4. 디데이 계산
+        LocalDateTime current = LocalDateTime.now();
+        LocalDateTime arriveAt = rocketEntity.getFinalArrival();
+
+        Period period = Period.between(LocalDate.from(current), LocalDate.from(arriveAt));
+
+        int dDay = period.getDays();
+        String dDayString;
+        if (dDay == 0) dDayString = "D - DAY";
+        else dDayString = dDay + "일 남음";
+
         return new MemoResponseDto(
+            dDayString,
             randomMemo.getPhotoUrl(),
             randomMemo.getMember().getNickname(),
             filteredDescription

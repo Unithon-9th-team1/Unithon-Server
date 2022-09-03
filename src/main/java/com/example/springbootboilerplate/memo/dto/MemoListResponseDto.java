@@ -13,9 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MemoListResponseDto {
     private String rocketName;
 
-    private LocalDateTime startedAt;
-
-    private LocalDateTime endAt;
+    private String period;
 
     private List<MemoResponseDto> memos;
 
