@@ -49,4 +49,13 @@ public class RocketController {
         rocketService.boardRocket(rocketBoardRequest);
         return DataResponseDto.of(Code.CREATED, rocketService.boardRocket(rocketBoardRequest));
     }
+
+    /**
+     * 유저 로켓 목록 조회 API - 정연
+     * [GET] /rocket?nickname=(유저닉네임)
+     */
+    @GetMapping("/rocket")
+    public DataResponseDto<Object> getMyRockets(@RequestParam String nickname) {
+        return DataResponseDto.of(Code.OK, rocketService.getMyRockets(nickname));
+    }
 }
