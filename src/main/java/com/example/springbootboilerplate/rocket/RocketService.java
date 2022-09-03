@@ -11,18 +11,22 @@ import com.example.springbootboilerplate.rocket.domain.Rocket;
 import com.example.springbootboilerplate.rocket.dto.RocketBoardRequestDto;
 import com.example.springbootboilerplate.rocket.dto.RocketBookingRequestDto;
 import com.example.springbootboilerplate.rocket.dto.RocketResponseDto;
-import java.util.ArrayList;
-import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.sql.Timestamp;
+import java.util.*;
+
+import lombok.RequiredArgsConstructor;
+import org.joda.time.DateTime;
+import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@EnableScheduling
 public class RocketService {
+
+
     private final RocketRepository rocketRepository;
     private final MemberRepository memberRepository;
     private final PassengerRepository passengerRepository;
@@ -77,6 +81,33 @@ public class RocketService {
         Rocket rocket = this.findById(rocketId);
         rocket.updateBoardingStatus(2); // 탑승완료로 변경
         rocketRepository.save(rocket);
+    }
+
+    // 초 분 시 일 월 요일
+//    @Scheduled(cron = "${schedule.time}")
+    public void countDown(Long rocketId){
+        Rocket rocket = this.findById(rocketId);
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.HOUR, 72);
+//        Date date = calendar.getTime();
+//        Timestamp timestamp = new Timestamp(date.getTime());
+//
+//        System.out.println(date);
+//        System.out.println(timestamp);
+        TimerTask task = new TimerTask() {
+            public void run(){
+                rocket.updateBoardingStatus(3); // 항해완료로 변경
+                rocketRepository.save(rocket);
+                System.out.println("저장함");
+            }
+        };
+
+        Timer timer = new Timer("Timer");
+//        long delay = 259200000L;
+// 1초에 1000m, 1분 60000ms;
+
+        long delay = 10000L;
+        timer.schedule(task, delay);
     }
 
     // 로켓 탑승하기 버튼 누른 경우
