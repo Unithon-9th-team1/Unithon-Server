@@ -56,8 +56,7 @@ public class RocketService {
         /***
          * 로켓만들기 완료 버튼을 누른 순간 서버한테 데이터 보내라
          * uuid 를 언제받아서 저장할것인가.?
-         * **/
-
+         * */
         // 탑승객 저장
         Passenger passenger = Passenger.builder()
                 .rocketId(savedRocket.getId())
@@ -76,6 +75,8 @@ public class RocketService {
     public void departRocket(Long rocketId) {
         Rocket rocket = this.findById(rocketId);
         rocket.updateBoardingStatus(2); // 탑승완료로 변경
+        rocket.updateArrivalEnd(rocket.getArrivalEnd());
+
         rocketRepository.save(rocket);
     }
 
@@ -84,7 +85,7 @@ public class RocketService {
     public void countDown(Long rocketId){
         Rocket rocket = this.findById(rocketId);
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.HOUR, 72);
+        calendar.add(Calendar.DATE, rocket.getArrivalEnd());
 //        Date date = calendar.getTime();
 //        Timestamp timestamp = new Timestamp(date.getTime());
 //
@@ -94,7 +95,6 @@ public class RocketService {
             public void run(){
                 rocket.updateBoardingStatus(3); // 항해완료로 변경
                 rocketRepository.save(rocket);
-                System.out.println("저장함");
             }
         };
 
@@ -189,7 +189,7 @@ public class RocketService {
             rocketResponseDtos.add(RocketResponseDto.rocketListResponse(
                 rocket.getId(),
                 rocket.getRocketName(),
-                rocket.getArrivalEnd(),
+                rocket.getFinalArrival(),
                 rocket.getBoardingStatus())
             );
         }

@@ -65,12 +65,11 @@ public class MemoService {
                 memo.getPhotoUrl(),
                 memo.getMember().getNickname(),
                 memo.getDescription()
-            )
-            );
+            ));
         }
 
         // 도착 날짜 String to LocalDateTime
-        LocalDateTime arrivedAt = LocalDateTime.now().plusDays(rocketEntity.getArrivalEnd().charAt(0));
+        LocalDateTime arrivedAt = rocketEntity.getFinalArrival();
 
         return new MemoListResponseDto(
             rocketEntity.getRocketName(),

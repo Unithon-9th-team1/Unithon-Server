@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -13,14 +14,14 @@ public class RocketResponseDto {
     private Long rocketId;
     private String rocketName;
     private List<String> passengers;
-    private String arrivalEnd;
+    private LocalDateTime finalArrival;
     private String boardingStatus;
 
-    public static RocketResponseDto rocketListResponse(Long rocketId, String rocketName, String arrivalEnd, Integer boardingStatus) {
+    public static RocketResponseDto rocketListResponse(Long rocketId, String rocketName, LocalDateTime finalArrival, Integer boardingStatus) {
         return RocketResponseDto.builder()
             .rocketId(rocketId)
             .rocketName(rocketName)
-            .arrivalEnd(arrivalEnd)
+            .finalArrival(finalArrival)
             .boardingStatus(boardingStatus==1 ? "탑승대기" : ((boardingStatus == 2 ? "탑승완료" : "항해완료")))
             .build();
     }
