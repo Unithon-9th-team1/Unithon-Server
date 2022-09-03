@@ -16,7 +16,6 @@ public class ErrorResponseDto extends ResponseDto {
         super(false, errorCode.getCode(), errorCode.getMessage(message));
     }
 
-
     public static ErrorResponseDto of(Code errorCode) {
         return new ErrorResponseDto(errorCode);
     }
