@@ -57,6 +57,6 @@ public class RocketController {
     // uuid 로 바궈야하는것인지
     @GetMapping("/rockets")
     public DataResponseDto<Object> getMyRockets(@RequestParam(required = false) String nickname) {
-        return DataResponseDto.of(Code.OK, rocketService.getMyRockets(nickname));
+        return DataResponseDto.of(Code.OK, rocketService.getUserRockets(nickname));
     }
 }
