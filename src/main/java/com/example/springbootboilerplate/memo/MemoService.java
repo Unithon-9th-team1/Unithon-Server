@@ -124,18 +124,14 @@ public class MemoService {
             String star = "*";
             String repeatedStar = star.repeat(word.length());
             splittedText.set(ran, repeatedStar);
-            System.out.println("여여기기봐봐");
-            System.out.println(splittedText);
         }
 
-        System.out.println("여기봐");
-        System.out.println("필터링할 단어의 인덱스 리스트: " + randList);
-        System.out.println(splittedText);
+        String filteredDescription = String.join(" ", splittedText);
 
         return new MemoResponseDto(
             randomMemo.getPhotoUrl(),
             randomMemo.getMember().getNickname(),
-            randomMemo.getDescription()
+            filteredDescription
         );
     }
 
