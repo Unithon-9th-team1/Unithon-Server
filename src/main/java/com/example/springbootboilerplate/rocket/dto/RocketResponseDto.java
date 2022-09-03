@@ -7,13 +7,13 @@ import java.util.List;
 
 @Getter
 @Builder
-public class RocketBookingResponseDto {
+public class RocketResponseDto {
     private Long rocketId;
     private String nickname;
     private List<String> passengers;
 
-    public static RocketBookingResponseDto of(String nickname, List<String> passengers){
-        return RocketBookingResponseDto.builder()
+    public static RocketResponseDto of(String nickname, List<String> passengers){
+        return RocketResponseDto.builder()
                 .nickname(nickname)
                 .passengers(passengers)
                 .build();

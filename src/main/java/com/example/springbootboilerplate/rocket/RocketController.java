@@ -6,7 +6,7 @@ import com.example.springbootboilerplate.base.dto.DataResponseDto;
 import com.example.springbootboilerplate.member.MemberService;
 import com.example.springbootboilerplate.rocket.dto.RocketBoardRequestDto;
 import com.example.springbootboilerplate.rocket.dto.RocketBookingRequestDto;
-import com.example.springbootboilerplate.rocket.dto.RocketBookingResponseDto;
+import com.example.springbootboilerplate.rocket.dto.RocketResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +19,7 @@ public class RocketController {
 
     // 로켓 예약하기
     @PostMapping("/rocket-booking")
-    public ResponseEntity<RocketBookingResponseDto> bookRocket(@RequestBody RocketBookingRequestDto rocketRequest){
+    public ResponseEntity<RocketResponseDto> bookRocket(@RequestBody RocketBookingRequestDto rocketRequest){
         return ResponseEntity.ok().body(rocketService.bookRocket(rocketRequest));
     }
 
@@ -32,7 +32,7 @@ public class RocketController {
 
     // 로켓 탑승하기
     @PostMapping("/rocket-boarding")
-    public DataResponseDto<Object> boardRocket(@RequestBody RocketBoardRequestDto rocketBoardRequest){
+    public RocketResponseDto boardRocket(@RequestBody RocketBoardRequestDto rocketBoardRequest){
         String code = rocketBoardRequest.getCode();
         String nickname = rocketBoardRequest.getNickname();
         if(rocketService.confirmCode(code))
@@ -40,21 +40,6 @@ public class RocketController {
 
         if(memberService.confirmNickname(nickname))
             throw new GeneralException(Code.CONFLICT, "없는 닉네임입니다");
-        rocketService.boardRocket(rocketBoardRequest);
+        return rocketService.boardRocket(rocketBoardRequest);
     }
-
-    // 특정 로켓 대기자 확인
-//    @GetMapping("/rocket/{rocketID}")
-//    public ResponseEntity<RocketBookRequestDto> bookRocket(@RequestBody RocketBookRequestDto rocketRequest){
-//        rocketService.bookRocket(rocketRequest);
-//        return ResponseEntity.ok().body(rocketRequest);
-//    }
-
-    // 로켓 탑승하기
-    @PostMapping("/rocket-boarding")
-    public ResponseEntity<RocketBookingRequestDto> boardRocket(@RequestBody RocketBookingRequestDto rocketRequest){
-        return ResponseEntity.status(404).body(rocketRequest);
-    }
-
-
 }

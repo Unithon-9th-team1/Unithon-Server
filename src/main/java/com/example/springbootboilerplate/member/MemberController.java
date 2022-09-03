@@ -14,6 +14,6 @@ public class MemberController {
 
     @GetMapping("")
     public void checkNickname(@RequestParam("nickname") String nickname){
-        memberService.checkNickname(nickname);
+        memberService.confirmNickname(nickname);
     }
 }

@@ -18,7 +18,7 @@ public class Passenger {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String seat;
+    private Integer seatId;
     private Long rocketId;
     private Long userId;
 }
