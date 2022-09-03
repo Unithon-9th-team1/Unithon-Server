@@ -2,6 +2,7 @@ package com.example.springbootboilerplate.memo.domain;
 
 import com.example.springbootboilerplate.config.BaseTimeEntity;
 import com.example.springbootboilerplate.member.domain.Member;
+import com.example.springbootboilerplate.rocket.domain.Rocket;
 import com.sun.istack.NotNull;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,12 +31,16 @@ public class Memo extends BaseTimeEntity {
     @ManyToOne
     private Member member;
 
+    @ManyToOne
+    private Rocket rocket;
+
     @Builder
-    public Memo(Long id, String photoUrl, String description, Member member) {
+    public Memo(Long id, String photoUrl, String description, Member member, Rocket rocket) {
         this.id = id;
         this.photoUrl = photoUrl;
         this.description = description;
         this.member = member;
+        this.rocket = rocket;
     }
 
 }
