@@ -78,7 +78,7 @@ public class RocketService {
         rocketRepository.save(rocket);
     }
 
-    // 로켓 탑승하기
+    // 로켓 탑승하기 버튼 누른 경우
     public RocketResponseDto boardRocket(RocketBoardRequestDto rocketBoardRequest) {
         // 코드를 가지고 로켓을 찾아야 함
         String code = rocketBoardRequest.getCode();
@@ -115,6 +115,7 @@ public class RocketService {
         return passengerList;
     }
 
+    // 코드 검증하기
     public boolean confirmCode(String code){
         for(Rocket rocket: rockets){
             if(rocket.getCode() == code)
