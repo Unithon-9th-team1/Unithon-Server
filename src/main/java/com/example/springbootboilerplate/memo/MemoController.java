@@ -47,14 +47,24 @@ public class MemoController {
 
     /**
      * 메모 목록 조회 API - 정연
-     * [POST] /memo?rocket='로켓식별문자열'
+     * [GET] 전체 조회 : /memo?rocket=정연이네로켓&random=false (default)
+     * [GET] 랜덤 필터링 조회 : /memo?rocket=정연로켓&random=true
      */
     @GetMapping("")
-    public DataResponseDto<Object> getMemos(@RequestParam String rocket) {
-        // 로켓 이름으로 엔티티 조회해서 존재 여부 확인
-        return null;
+    public DataResponseDto<Object> getMemos(@RequestParam String rocket, @RequestParam(defaultValue = "false") boolean random) {
+        // 랜덤 필터링 조회
+        if (random) {
+            return DataResponseDto.of(memoService.getFilterdRandomMemo(rocket));
+        }
+
+        // 전체 조회
+        return DataResponseDto.of(memoService.getMemos(rocket));
     }
 
+    /**
+     * 서버 연결용 테스트 API - 정연
+     * [GET] /memo/test
+     */
     @GetMapping("/test")
     public DataResponseDto<Object> test() {
         return DataResponseDto.of("테스트");
