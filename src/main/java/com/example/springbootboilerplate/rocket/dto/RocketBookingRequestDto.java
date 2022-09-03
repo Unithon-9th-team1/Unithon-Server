@@ -9,7 +9,7 @@ import lombok.Getter;
 public class RocketBookingRequestDto {
     private String rocketName;
     private String nickname;
-    private String arrivalEnd;
+    private Integer arrivalEnd;
     private String code;
 
     public Rocket toEntity(){
