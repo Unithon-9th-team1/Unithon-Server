@@ -169,8 +169,8 @@ public class RocketService {
     }
 
     // 유저가 참가한 로켓 목록 조회
-    public List<RocketResponseDto> getUserRockets(String nickname) {
-        Member member = memberRepository.findByNickname(nickname)
+    public List<RocketResponseDto> getUserRockets(String uuid) {
+        Member member = memberRepository.findByUuid(uuid)
             .orElseThrow(() -> new GeneralException(Code.NOT_FOUND, "유저를 DB에서 찾을 수 없습니다."));
         List<Passenger> passengers = passengerRepository.findAllByUserId(member.getId());
 
