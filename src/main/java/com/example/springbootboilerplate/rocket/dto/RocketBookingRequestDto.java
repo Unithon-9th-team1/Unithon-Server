@@ -11,6 +11,7 @@ public class RocketBookingRequestDto {
     private String nickname;
     private Integer arrivalEnd;
     private String code;
+    private String uuid;
 
     public Rocket toEntity(){
         return Rocket.builder()

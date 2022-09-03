@@ -48,15 +48,13 @@ public class RocketService {
 
         // 닉네임으로 멤버 저장
         String nickname = rocketRequest.getNickname();
+        String uuid = rocketRequest.getUuid();
         Member member = Member.builder()
                 .nickname(nickname)
+                .uuid(uuid)
                 .build();
         memberRepository.save(member);
 
-        /***
-         * 로켓만들기 완료 버튼을 누른 순간 서버한테 데이터 보내라
-         * uuid 를 언제받아서 저장할것인가.?
-         * */
         // 탑승객 저장
         Passenger passenger = Passenger.builder()
                 .rocketId(savedRocket.getId())
