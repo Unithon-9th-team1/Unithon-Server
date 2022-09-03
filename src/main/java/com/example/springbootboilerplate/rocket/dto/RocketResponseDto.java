@@ -12,8 +12,9 @@ public class RocketResponseDto {
     private String nickname;
     private List<String> passengers;
 
-    public static RocketResponseDto of(String nickname, List<String> passengers){
+    public static RocketResponseDto of(Long rocketId, String nickname, List<String> passengers){
         return RocketResponseDto.builder()
+                .rocketId(rocketId)
                 .nickname(nickname)
                 .passengers(passengers)
                 .build();

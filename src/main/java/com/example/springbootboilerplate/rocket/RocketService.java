@@ -35,7 +35,7 @@ public class RocketService {
     }
 
     public RocketResponseDto bookRocket(RocketBookingRequestDto rocketRequest) {
-        // 닉네임 작성해서 회원 엔티티 저장
+        // 닉네임 작성 후 회원 엔티티 저장
         String nickname = rocketRequest.getNickname();
         Member member = new Member(nickname);
         Member savedMember = memberRepository.save(member);
@@ -46,52 +46,52 @@ public class RocketService {
         Rocket savedRocket = rocketRepository.save(rocket);
         rockets.add(savedRocket);
 
-        // 좌석 저장
-
         // 탑승객 저장
-//        String seat = rocketRequest.getSeat();
-//        Passenger passenger = Passenger.builder()
-//                .seat(seat)
-//                .rocketId(savedRocket.getId())
-//                .userId(savedMember.getId())
-//                .build();
-//        passengerRepository.save(passenger);
+        Integer seatId = rocketRequest.getSeatId();
+        Passenger passenger = Passenger.builder()
+                .seatId(seatId)
+                .rocketId(savedRocket.getId())
+                .userId(savedMember.getId())
+                .build();
+        Passenger savedPassenger = passengerRepository.save(passenger);
+        passengers.add(savedPassenger);
 
-        List<String> pass = passengers.stream()
+        List<String> friendPassengers = passengers.stream()
                 .filter(p -> p.getRocketId() == savedRocket.getId()) // 동일 로켓 번호 찾기
                 .map(p -> memberRepository.findById(p.getUserId()).get().getNickname()) // 그중에서도 닉네임만 뽑기
                 .collect(Collectors.toList());
-        return RocketResponseDto.of(nickname, pass);
+
+        return RocketResponseDto.of(savedRocket.getId(), nickname, friendPassengers);
     }
 
     // 로켓 탑승하기
-    public RocketResponseDto boardRocket(RocketBoardRequestDto rocketBoardRequest) {
-        // 코드를 가지고 로켓을 찾아야 함
-        String code = rocketBoardRequest.getCode();
-        Rocket rocket = findByCode(code);
-
-
-        // 닉네임 갖고 승객 찾기
-        String nickname = rocketBoardRequest.getNickname();
-        Member member = memberRepository.findByNickname(nickname).get();
-
-        // 탑승객 저장
-//        Integer seatId = rocketBoard.
-//        String seat = rocketBoardRequest.getSeat();
-//        Passenger passenger = Passenger.builder()
-//                .seat(seat)
-//                .rocketId(rocket.getId())
-//                .userId(member.getId())
-//                .build();
-//        passengerRepository.save(passenger);
-
-        List<String> pass = passengers.stream()
-                .filter(p -> p.getRocketId() == rocket.getId()) // 동일 로켓 번호 찾기
-                .map(p -> memberRepository.findById(p.getUserId()).get().getNickname()) // 그중에서도 닉네임만 뽑기
-                .collect(Collectors.toList());
-
-        return RocketResponseDto.of(nickname, pass);
-    }
+//    public RocketResponseDto boardRocket(RocketBoardRequestDto rocketBoardRequest) {
+//        // 코드를 가지고 로켓을 찾아야 함
+//        String code = rocketBoardRequest.getCode();
+//        Rocket rocket = findByCode(code);
+//
+//
+//        // 닉네임 갖고 승객 찾기
+//        String nickname = rocketBoardRequest.getNickname();
+//        Member member = memberRepository.findByNickname(nickname).get();
+//
+//        // 탑승객 저장
+////        Integer seatId = rocketBoard.
+////        String seat = rocketBoardRequest.getSeat();
+////        Passenger passenger = Passenger.builder()
+////                .seat(seat)
+////                .rocketId(rocket.getId())
+////                .userId(member.getId())
+////                .build();
+////        passengerRepository.save(passenger);
+//
+//        List<String> pass = passengers.stream()
+//                .filter(p -> p.getRocketId() == rocket.getId()) // 동일 로켓 번호 찾기
+//                .map(p -> memberRepository.findById(p.getUserId()).get().getNickname()) // 그중에서도 닉네임만 뽑기
+//                .collect(Collectors.toList());
+//
+//        return RocketResponseDto.of(nickname, pass);
+//    }
 
     public boolean confirmCode(String code){
         for(Rocket rocket: rockets){
