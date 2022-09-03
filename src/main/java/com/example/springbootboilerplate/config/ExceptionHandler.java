@@ -17,7 +17,7 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
 
     @org.springframework.web.bind.annotation.ExceptionHandler
     public ResponseEntity<Object> validation(ConstraintViolationException e, WebRequest request) {
-        return handleExceptionInternal(e, Code.VALIDATION_ERROR, request);
+        return handleExceptionInternal(e, Code.BAD_REQUEST, request);
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler

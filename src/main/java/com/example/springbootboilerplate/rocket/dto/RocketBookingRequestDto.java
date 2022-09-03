@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class RocketBookRequestDto {
+public class RocketBookingRequestDto {
     private String rocketName;
     private String nickname;
     private String arrivalEnd;

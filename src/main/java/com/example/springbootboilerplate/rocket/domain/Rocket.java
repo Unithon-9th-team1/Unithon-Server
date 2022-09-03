@@ -22,4 +22,8 @@ public class Rocket {
     private String arrivalEnd;
     private String arrivalTime;
     private String code;
+
+    public void updateCode(String code){
+        this.code = code;
+    }
 }
