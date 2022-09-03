@@ -11,6 +11,7 @@ import com.example.springbootboilerplate.rocket.domain.Rocket;
 import com.example.springbootboilerplate.rocket.dto.RocketBoardRequestDto;
 import com.example.springbootboilerplate.rocket.dto.RocketBookingRequestDto;
 import com.example.springbootboilerplate.rocket.dto.RocketResponseDto;
+import java.util.ArrayList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
@@ -137,5 +138,26 @@ public class RocketService {
                 return rocket;
         }
         throw new GeneralException(Code.NOT_FOUND, "잘못된 코드번호입니다");
+    }
+
+    // 유저가 참가한 로켓 목록 조회
+    public List<RocketResponseDto> getMyRockets(String nickname) {
+        Member member = memberRepository.findByNickname(nickname)
+            .orElseThrow(() -> new GeneralException(Code.NOT_FOUND, "유저를 DB에서 찾을 수 없습니다."));
+        List<Passenger> passengers = passengerRepository.findAllByUserId(member.getId());
+
+        List<RocketResponseDto> rocketResponseDtos = new ArrayList<>();
+        for (Passenger passenger : passengers) {
+            Rocket rocket = rocketRepository.findById(passenger.getRocketId())
+                    .orElseThrow(() -> new GeneralException(Code.NOT_FOUND, "로켓을 DB에서 찾을 수 없습니다."));
+            rocketResponseDtos.add(RocketResponseDto.rocketListResponse(
+                rocket.getId(),
+                rocket.getRocketName(),
+                rocket.getArrivalEnd()
+                )
+            );
+        }
+
+        return rocketResponseDtos;
     }
 }

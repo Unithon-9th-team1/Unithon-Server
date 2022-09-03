@@ -1,5 +1,6 @@
 package com.example.springbootboilerplate.rocket.domain;
 
+import com.example.springbootboilerplate.config.BaseTimeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,13 +14,13 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Rocket {
+public class Rocket extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String rocketName;
-    private String arrivalEnd;
+    private String arrivalEnd; // 3일 후
     private String arrivalTime;
     private String code;
 
