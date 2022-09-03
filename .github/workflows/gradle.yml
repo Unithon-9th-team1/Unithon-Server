@@ -1,0 +1,45 @@
+name: Spring Boot & Gradle CI/CD
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v1
+      with:
+        java-version: '17'
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x ./gradlew
+      shell: bash
+          
+    - name: Build with Gradle # 실제 application build(-x 옵션을 통해 test는 제외)
+      run: ./gradlew build -x test
+
+    - name: Make zip file #1
+      run: zip -qq -r ./$GITHUB_SHA.zip .
+      shell: bash
+
+    - name: Configure AWS credentials #2
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-northeast-2
+
+    - name: Upload to S3 #3
+      run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://unithon-9th/deploy/$GITHUB_SHA.zip
+
+    - name: Code Deploy #4 
+      run: aws deploy create-deployment --application-name unithon-9th
+        --deployment-config-name CodeDeployDefault.OneAtATime
+        --deployment-group-name qa
+        --s3-location bucket=unithon-9th,bundleType=zip,key=deploy/$GITHUB_SHA.zip

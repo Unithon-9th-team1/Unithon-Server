@@ -31,6 +31,10 @@ public class DataResponseDto<T> extends ResponseDto {
         return new DataResponseDto<>(code, data);
     }
 
+    public static <T> DataResponseDto<T> ofMessage(T data, String message) {
+        return new DataResponseDto<>(data, message);
+    }
+
     public static <T> DataResponseDto<T> empty() {
         return new DataResponseDto<>(null);
     }

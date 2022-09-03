@@ -3,6 +3,7 @@ package com.example.springbootboilerplate.rocket;
 import com.example.springbootboilerplate.base.GeneralException;
 import com.example.springbootboilerplate.base.constant.Code;
 import com.example.springbootboilerplate.member.MemberRepository;
+import com.example.springbootboilerplate.member.MemberService;
 import com.example.springbootboilerplate.member.domain.Member;
 import com.example.springbootboilerplate.passenger.PassengerRepository;
 import com.example.springbootboilerplate.passenger.domain.Passenger;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +26,8 @@ public class RocketService {
     private final RocketRepository rocketRepository;
     private final MemberRepository memberRepository;
     private final PassengerRepository passengerRepository;
+
+    private final MemberService memberService;
 
     private List<Member> members;
     private List<Passenger> passengers;
@@ -36,8 +40,11 @@ public class RocketService {
     }
 
     public RocketResponseDto bookRocket(RocketBookingRequestDto rocketRequest) {
-        // 닉네임 작성해서 회원 엔티티 저장
+        // 닉네임 작성 후 회원 엔티티 저장
         String nickname = rocketRequest.getNickname();
+        if(memberService.confirmNickname(nickname))
+            throw new GeneralException(Code.CONFLICT, "중복된 닉네임입니다");
+
         Member member = new Member(nickname);
         Member savedMember = memberRepository.save(member);
         members.add(savedMember);
@@ -47,51 +54,58 @@ public class RocketService {
         Rocket savedRocket = rocketRepository.save(rocket);
         rockets.add(savedRocket);
 
-        // 좌석 저장
-
         // 탑승객 저장
-//        String seat = rocketRequest.getSeat();
-//        Passenger passenger = Passenger.builder()
-//                .seat(seat)
-//                .rocketId(savedRocket.getId())
-//                .userId(savedMember.getId())
-//                .build();
-//        passengerRepository.save(passenger);
+        Integer seatId = rocketRequest.getSeatId();
+        Passenger passenger = Passenger.builder()
+                .seatId(seatId)
+                .rocketId(savedRocket.getId())
+                .userId(savedMember.getId())
+                .build();
+        Passenger savedPassenger = passengerRepository.save(passenger);
+        passengers.add(savedPassenger);
 
-        List<String> pass = passengers.stream()
+        List<String> friendPassengers = passengers.stream()
                 .filter(p -> p.getRocketId() == savedRocket.getId()) // 동일 로켓 번호 찾기
-                .map(p -> memberRepository.findById(p.getUserId()).get().getNickname()) // 그중에서도 닉네임만 뽑기
+                .map(p -> memberRepository.findById(p .getUserId()).get().getNickname()) // 그중에서도 닉네임만 뽑기
                 .collect(Collectors.toList());
-        return RocketResponseDto.of(nickname, pass);
+
+        return RocketResponseDto.of(savedRocket.getId(), nickname, friendPassengers);
     }
 
     // 로켓 탑승하기
     public RocketResponseDto boardRocket(RocketBoardRequestDto rocketBoardRequest) {
         // 코드를 가지고 로켓을 찾아야 함
         String code = rocketBoardRequest.getCode();
-        Rocket rocket = findByCode(code);
-
+        if(this.confirmCode(code))
+            throw new GeneralException(Code.CONFLICT, "없는 코드번호입니다");
 
         // 닉네임 갖고 승객 찾기
         String nickname = rocketBoardRequest.getNickname();
+        if(memberService.confirmNickname(nickname))
+            throw new GeneralException(Code.CONFLICT, "없는 닉네임입니다");
+
         Member member = memberRepository.findByNickname(nickname).get();
 
+        Rocket rocket = findByCode(code);
+
         // 탑승객 저장
-//        Integer seatId = rocketBoard.
-//        String seat = rocketBoardRequest.getSeat();
-//        Passenger passenger = Passenger.builder()
-//                .seat(seat)
-//                .rocketId(rocket.getId())
-//                .userId(member.getId())
-//                .build();
-//        passengerRepository.save(passenger);
+        Integer seatId = rocketBoardRequest.getSeatId();
+        Passenger newPassenger = Passenger.builder()
+                .seatId(seatId)
+                .rocketId(rocket.getId())
+                .userId(member.getId())
+                .build();
+        passengerRepository.save(newPassenger);
 
-        List<String> pass = passengers.stream()
-                .filter(p -> p.getRocketId() == rocket.getId()) // 동일 로켓 번호 찾기
-                .map(p -> memberRepository.findById(p.getUserId()).get().getNickname()) // 그중에서도 닉네임만 뽑기
-                .collect(Collectors.toList());
+        List<String> passengerList = new ArrayList<>();
+        for(Passenger p: passengers){
+            if(p.getRocketId() == rocket.getId()){
+                String foundNickname = memberRepository.findById(p.getUserId()).get().getNickname();
+                passengerList.add(foundNickname);
+            }
+        }
 
-        return RocketResponseDto.of(nickname, pass);
+        return RocketResponseDto.of(rocket.getId(), nickname, passengerList);
     }
 
     public boolean confirmCode(String code){
