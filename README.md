@@ -11,7 +11,7 @@
 `Settings > Build, Execution, Deployment > Compiler > Annotation Processors` <br>
 Enable annotation processing 체크 ✅
 * 프로젝트마다 진행해주어야 함!
-* 
+
 ### Spring Security
 https://bcp0109.tistory.com/301 를 참고해서 구현
 
@@ -23,3 +23,6 @@ https://bcp0109.tistory.com/301 를 참고해서 구현
 - REFACTOR: 코드 리펙토링
 - TEST: 테스트 코트, 리펙토링 테스트 코드 추가
 - CHORE: 빌드 업무 수정, 패키지 매니저 수정(ex .gitignore 수정 같은 경우)
+- ADD: Feat 이외의 부수적인 코드 추가, 라이브러리 추가, 새로운 파일 생성 시
+- DEL: 쓸모없는 코드 삭제
+
