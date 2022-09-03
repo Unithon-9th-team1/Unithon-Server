@@ -44,12 +44,14 @@ public class MemoService {
             throw new RuntimeException(e);
         }
 
+        Rocket rocket = rocketRepository.findById(memoRequestDto.getRocketId()).get();
+
         // 2. 닉네임으로 유저 가져오기
         Member member = memberRepository.findByNickname(memoRequestDto.getNickname())
             .orElseThrow(() -> new GeneralException(Code.NOT_FOUND, "유저를 DB에서 찾을 수 없습니다."));
 
         // 2. DB에 정보 저장
-        memoRepository.save(memoRequestDto.toMember(photoUrl, member)).getPhotoUrl();
+        memoRepository.save(memoRequestDto.toMemo(photoUrl, member, rocket));
         return true;
     }
 
@@ -59,6 +61,7 @@ public class MemoService {
             .orElseThrow(() -> new GeneralException(Code.NOT_FOUND, "로켓을 DB에서 찾을 수 없습니다."));
 
         List<Memo> memos = memoRepository.findAllByRocket(rocketEntity);
+        System.out.println(memos.size());
         List<MemoResponseDto> memoResponseDtos = new ArrayList<>();
         for (Memo memo : memos) {
             memoResponseDtos.add(new MemoResponseDto(
