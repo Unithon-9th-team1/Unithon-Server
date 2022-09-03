@@ -12,7 +12,9 @@ import com.example.springbootboilerplate.rocket.RocketRepository;
 import com.example.springbootboilerplate.rocket.domain.Rocket;
 import com.example.springbootboilerplate.upload.S3FileUploadService;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -124,7 +126,7 @@ public class MemoService {
             randList.add(randomNum);
         }
 
-        // 3. 날짜마다 필터링 달라지는 로직을 만들어
+        // 3. 필터링 달라지는 로직을 만들어
         // 단어 > *
         List<String> splittedTextCopy = new ArrayList<>(splittedText);
         for (Integer ran : randList) {
@@ -137,7 +139,19 @@ public class MemoService {
 
         String filteredDescription = String.join(" ", splittedText);
 
+        // 4. 디데이 계산
+        LocalDateTime current = LocalDateTime.now();
+        LocalDateTime arriveAt = rocketEntity.getFinalArrival();
+
+        Period period = Period.between(LocalDate.from(current), LocalDate.from(arriveAt));
+
+        int dDay = period.getDays();
+        String dDayString;
+        if (dDay == 0) dDayString = "D - DAY";
+        else dDayString = dDay + "일 남음";
+
         return new MemoResponseDto(
+            dDayString,
             randomMemo.getPhotoUrl(),
             randomMemo.getMember().getNickname(),
             filteredDescription
