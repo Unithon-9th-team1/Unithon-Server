@@ -6,5 +6,4 @@ import lombok.Getter;
 public class RocketBoardRequestDto {
     private String code;
     private String nickname;
-    private Integer seatId;
 }

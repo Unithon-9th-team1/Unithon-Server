@@ -20,10 +20,14 @@ public class Rocket {
 
     private String rocketName;
     private String arrivalEnd;
-    private String arrivalTime;
     private String code;
+    private Integer boardingStatus;
 
     public void updateCode(String code){
         this.code = code;
+    }
+
+    public void updateBoardingStatus(int status){
+        this.boardingStatus = status;
     }
 }

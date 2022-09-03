@@ -38,64 +38,73 @@ public class RocketService {
         rockets = rocketRepository.findAll();
     }
 
-    public RocketResponseDto bookRocket(RocketBookingRequestDto rocketRequest) {
-        // 닉네임 작성 후 회원 엔티티 저장
-        String nickname = rocketRequest.getNickname();
-        if(memberService.confirmNickname(nickname))
-            throw new GeneralException(Code.CONFLICT, "중복된 닉네임입니다");
-
-        Member member = new Member(nickname);
-        Member savedMember = memberRepository.save(member);
-        members.add(savedMember);
-
+    // 로켓 생성
+    public RocketResponseDto createRocket(RocketBookingRequestDto rocketRequest) {
         // 로켓 저장
         Rocket rocket = rocketRequest.toEntity();
         Rocket savedRocket = rocketRepository.save(rocket);
         rockets.add(savedRocket);
 
+        // 닉네임으로 멤버 저장
+        String nickname = rocketRequest.getNickname();
+        Member member = Member.builder()
+                .nickname(nickname)
+                .build();
+        memberRepository.save(member);
+
+        /***
+         * 로켓만들기 완료 버튼을 누른 순간 서버한테 데이터 보내라
+         * uuid 를 언제받아서 저장할것인가.?
+         * **/
+
         // 탑승객 저장
-        Integer seatId = rocketRequest.getSeatId();
         Passenger passenger = Passenger.builder()
-                .seatId(seatId)
                 .rocketId(savedRocket.getId())
-                .userId(savedMember.getId())
+                .userId(member.getId())
                 .build();
         Passenger savedPassenger = passengerRepository.save(passenger);
         passengers.add(savedPassenger);
 
-        List<String> friendPassengers = passengers.stream()
-                .filter(p -> p.getRocketId() == savedRocket.getId()) // 동일 로켓 번호 찾기
-                .map(p -> memberRepository.findById(p .getUserId()).get().getNickname()) // 그중에서도 닉네임만 뽑기
-                .collect(Collectors.toList());
+        String code = rocketRequest.getCode();
+        rocket.updateCode(code);
+        rocketRepository.save(rocket);
+        return RocketResponseDto.of(this.getPassengerList(savedRocket));
+    }
 
-        return RocketResponseDto.of(savedRocket.getId(), nickname, friendPassengers);
+    // 출발하기 버튼 누른 경우
+    public void departRocket(Long rocketId) {
+        Rocket rocket = this.findById(rocketId);
+        rocket.updateBoardingStatus(2); // 탑승완료로 변경
+        rocketRepository.save(rocket);
     }
 
     // 로켓 탑승하기
     public RocketResponseDto boardRocket(RocketBoardRequestDto rocketBoardRequest) {
         // 코드를 가지고 로켓을 찾아야 함
         String code = rocketBoardRequest.getCode();
-        if(this.confirmCode(code))
+        if(!this.confirmCode(code))
             throw new GeneralException(Code.CONFLICT, "없는 코드번호입니다");
 
         // 닉네임 갖고 승객 찾기
         String nickname = rocketBoardRequest.getNickname();
-        if(memberService.confirmNickname(nickname))
+        if(!memberService.confirmNickname(nickname))
             throw new GeneralException(Code.CONFLICT, "없는 닉네임입니다");
 
         Member member = memberRepository.findByNickname(nickname).get();
-
         Rocket rocket = findByCode(code);
 
         // 탑승객 저장
-        Integer seatId = rocketBoardRequest.getSeatId();
         Passenger newPassenger = Passenger.builder()
-                .seatId(seatId)
                 .rocketId(rocket.getId())
                 .userId(member.getId())
                 .build();
         passengerRepository.save(newPassenger);
 
+        return RocketResponseDto.of(this.getPassengerList(rocket));
+    }
+
+    // 로켓의 승객 찾아오는 코드
+    public List<String> getPassengerList(Rocket rocket){
         List<String> passengerList = new ArrayList<>();
         for(Passenger p: passengers){
             if(p.getRocketId() == rocket.getId()){
@@ -103,8 +112,7 @@ public class RocketService {
                 passengerList.add(foundNickname);
             }
         }
-
-        return RocketResponseDto.of(rocket.getId(), nickname, passengerList);
+        return passengerList;
     }
 
     public boolean confirmCode(String code){
@@ -113,12 +121,6 @@ public class RocketService {
                 return true;
         }
         return false;
-    }
-
-    public void saveRocketCode(Long rocketId, String code) {
-        Rocket rocket = this.findById(rocketId);
-        rocket.updateCode(code);
-        rocketRepository.save(rocket);
     }
 
     // 로켓 번호로 찾기
