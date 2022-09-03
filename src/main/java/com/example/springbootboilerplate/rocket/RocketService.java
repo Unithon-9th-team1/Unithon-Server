@@ -132,6 +132,7 @@ public class RocketService {
                 .userId(member.getId())
                 .build();
         passengerRepository.save(newPassenger);
+        passengers.add(newPassenger);
 
         return RocketResponseDto.of(this.getPassengerList(rocket));
     }
