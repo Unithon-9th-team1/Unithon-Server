@@ -21,4 +21,4 @@ fi
 
 cd $REPOSITORY/build/libs
 echo "> 배포 파일 경로 : $JAR_PATH"
-nohup java -jar $JAR_NAME --spring.config.location=/home/ubuntu/app/src/main/resources/application.properties &
+nohup java -jar $JAR_NAME --spring.config.location=/home/ubuntu/application.properties &
