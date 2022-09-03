@@ -19,7 +19,7 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String email;
+    private String nickname;
 
     private String password;
 
@@ -27,8 +27,8 @@ public class Member {
     private Authority authority;
 
     @Builder
-    public Member(String email, String password, Authority authority) {
-        this.email = email;
+    public Member(String nickname, String password, Authority authority) {
+        this.nickname = nickname;
         this.password = password;
         this.authority = authority;
     }

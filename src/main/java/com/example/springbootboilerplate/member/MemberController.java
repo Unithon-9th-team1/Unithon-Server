@@ -21,13 +21,8 @@ public class MemberController {
         return DataResponseDto.of(memberService.getMyInfo());
     }
 
-    @GetMapping("/{email}")
-    public DataResponseDto<Object> getMemberInfo(@PathVariable String email) {
-        return DataResponseDto.of(memberService.getMemberInfo(email));
-    }
-
-    @GetMapping("/test/{id}")
-    public DataResponseDto<Object> test(@PathVariable long id) {
-        return DataResponseDto.of(memberService.getMember(id));
+    @GetMapping("/{nickname}")
+    public DataResponseDto<Object> getMemberInfo(@PathVariable String nickname) {
+        return DataResponseDto.of(memberService.getMemberInfo(nickname));
     }
 }
