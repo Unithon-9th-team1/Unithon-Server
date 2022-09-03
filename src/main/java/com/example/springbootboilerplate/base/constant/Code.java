@@ -18,18 +18,24 @@ public enum Code {
      4000번대: DB, Server 오류
      5000번대: 인증(Security) 오류
      **/
+
+    /**
+     000번대: 공통 오류
+     100번대: 유저 관련 오류
+     200번대: 로켓 관련 오류
+     300번대: 메모 관련 오류
+     **/
+
     OK(1000, HttpStatus.OK, "Ok"),
 
     BAD_REQUEST(2000, HttpStatus.BAD_REQUEST, "Bad request"),
     VALIDATION_ERROR(2001, HttpStatus.BAD_REQUEST, "Validation error"),
-    PROVIDER_TYPE_NOT_VALID(2101, HttpStatus.BAD_REQUEST, "Provider type not valid"),
-    USER_ROLE_NOT_USER(2102, HttpStatus.BAD_REQUEST, "Not a user with a user role"),
+
+    USER_ROLE_NOT_USER(2101, HttpStatus.BAD_REQUEST, "Not a user with a user role"),
 
     INTERNAL_ERROR(4000, HttpStatus.INTERNAL_SERVER_ERROR, "Internal error"),
     DATA_ACCESS_ERROR(4001, HttpStatus.INTERNAL_SERVER_ERROR, "Data access error"),
-    KAKAO_SERVER_ERROR(4002, HttpStatus.INTERNAL_SERVER_ERROR , "Kakao server error"),
-    APPLE_SERVER_ERROR(4003, HttpStatus.INTERNAL_SERVER_ERROR , "Apple server error"),
-    S3_UPLOAD_ERROR(4004, HttpStatus.INTERNAL_SERVER_ERROR, "S3 upload error"),
+    S3_UPLOAD_ERROR(4002, HttpStatus.INTERNAL_SERVER_ERROR, "S3 upload error"),
     USER_NOT_FOUND(4100, HttpStatus.BAD_REQUEST, "Cannot find user from DB"),
 
     UNAUTHORIZED(5000, HttpStatus.UNAUTHORIZED, "User unauthorized"),
