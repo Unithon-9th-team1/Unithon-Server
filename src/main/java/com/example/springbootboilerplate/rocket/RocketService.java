@@ -40,7 +40,7 @@ public class RocketService {
     }
 
     // 로켓 생성
-    public RocketResponseDto createRocket(RocketBookingRequestDto rocketRequest) {
+    public void createRocket(RocketBookingRequestDto rocketRequest) {
         // 로켓 저장
         Rocket rocket = rocketRequest.toEntity();
         Rocket savedRocket = rocketRepository.save(rocket);
@@ -68,7 +68,6 @@ public class RocketService {
         String code = rocketRequest.getCode();
         rocket.updateCode(code);
         rocketRepository.save(rocket);
-        return RocketResponseDto.of(this.getPassengerList(savedRocket));
     }
 
     // 출발하기 버튼 누른 경우
@@ -107,7 +106,7 @@ public class RocketService {
     }
 
     // 로켓 탑승하기 버튼 누른 경우
-    public RocketResponseDto boardRocket(RocketBoardRequestDto rocketBoardRequest) {
+    public void boardRocket(RocketBoardRequestDto rocketBoardRequest) {
         // 코드를 가지고 로켓을 찾아야 함
         String code = rocketBoardRequest.getCode();
         if(!this.confirmCode(code))
@@ -120,10 +119,6 @@ public class RocketService {
                 .build();
         memberRepository.save(member);
 
-        //  if(!memberService.confirmNickname(nickname))
-        //  throw new GeneralException(Code.CONFLICT, "없는 닉네임입니다");
-
-        //Member member = memberRepository.findByNickname(nickname).get();
         Rocket rocket = findByCode(code);
 
         // 탑승객 저장
@@ -133,12 +128,11 @@ public class RocketService {
                 .build();
         passengerRepository.save(newPassenger);
         passengers.add(newPassenger);
-
-        return RocketResponseDto.of(this.getPassengerList(rocket));
     }
 
     // 로켓의 승객 찾아오는 코드
-    public List<String> getPassengerList(Rocket rocket){
+    public List<String> getPassengerList(Long rocketId){
+        Rocket rocket = rocketRepository.findById(rocketId).get();
         List<String> passengerList = new ArrayList<>();
         for(Passenger p: passengers){
             if(p.getRocketId() == rocket.getId()){
