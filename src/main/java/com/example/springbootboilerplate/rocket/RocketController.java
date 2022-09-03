@@ -1,15 +1,12 @@
 package com.example.springbootboilerplate.rocket;
 
-import com.example.springbootboilerplate.base.GeneralException;
 import com.example.springbootboilerplate.base.constant.Code;
 import com.example.springbootboilerplate.base.dto.DataResponseDto;
 import com.example.springbootboilerplate.member.MemberService;
 import com.example.springbootboilerplate.rocket.dto.RocketBoardRequestDto;
 import com.example.springbootboilerplate.rocket.dto.RocketBookingRequestDto;
 import com.example.springbootboilerplate.rocket.dto.RocketResponseDto;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
