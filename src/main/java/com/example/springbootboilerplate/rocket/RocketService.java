@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -88,19 +89,22 @@ public class RocketService {
 
         // 탑승객 저장
         Integer seatId = rocketBoardRequest.getSeatId();
-        Passenger passenger = Passenger.builder()
+        Passenger newPassenger = Passenger.builder()
                 .seatId(seatId)
                 .rocketId(rocket.getId())
                 .userId(member.getId())
                 .build();
-        passengerRepository.save(passenger);
+        passengerRepository.save(newPassenger);
 
-        List<String> pass = passengers.stream()
-                .filter(p -> p.getRocketId() == rocket.getId()) // 동일 로켓 번호 찾기
-                .map(p -> memberRepository.findById(p.getUserId()).get().getNickname()) // 그중에서도 닉네임만 뽑기
-                .collect(Collectors.toList());
+        List<String> passengerList = new ArrayList<>();
+        for(Passenger p: passengers){
+            if(p.getRocketId() == rocket.getId()){
+                String foundNickname = memberRepository.findById(p.getUserId()).get().getNickname();
+                passengerList.add(foundNickname);
+            }
+        }
 
-        return RocketResponseDto.of(rocket.getId(), nickname, pass);
+        return RocketResponseDto.of(rocket.getId(), nickname, passengerList);
     }
 
     public boolean confirmCode(String code){
