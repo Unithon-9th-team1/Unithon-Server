@@ -30,4 +30,8 @@ public class MemberService {
             .orElseThrow(() -> new GeneralException(Code.USER_NOT_FOUND, "유저 정보가 없습니다."));
     }
 
+    public void checkNickname(String nickname){
+//        memberRepository.findByNickname(nickname)
+//                .ifPresentOrElse(() -> new GeneralException(());
+    }
 }

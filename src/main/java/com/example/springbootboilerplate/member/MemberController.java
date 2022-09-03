@@ -5,10 +5,7 @@ import com.example.springbootboilerplate.member.domain.Member;
 import com.example.springbootboilerplate.member.dto.MemberResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,5 +21,10 @@ public class MemberController {
     @GetMapping("/{nickname}")
     public DataResponseDto<Object> getMemberInfo(@PathVariable String nickname) {
         return DataResponseDto.of(memberService.getMemberInfo(nickname));
+    }
+
+    @GetMapping("")
+    public void checkNickname(@RequestParam("nickname") String nickname){
+        memberService.checkNickname(nickname);
     }
 }
