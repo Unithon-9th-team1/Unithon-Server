@@ -21,16 +21,9 @@ public class Member {
 
     private String nickname;
 
-    private String password;
-
-    @Enumerated(EnumType.STRING)
-    private Authority authority;
-
     @Builder
-    public Member(String nickname, String password, Authority authority) {
+    public Member(String nickname) {
         this.nickname = nickname;
-        this.password = password;
-        this.authority = authority;
     }
 
 }
