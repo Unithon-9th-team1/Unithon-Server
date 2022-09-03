@@ -115,10 +115,15 @@ public class RocketService {
 
         // 닉네임 갖고 승객 찾기
         String nickname = rocketBoardRequest.getNickname();
-        if(!memberService.confirmNickname(nickname))
-            throw new GeneralException(Code.CONFLICT, "없는 닉네임입니다");
+        Member member = Member.builder()
+                .nickname(nickname)
+                .build();
+        memberRepository.save(member);
 
-        Member member = memberRepository.findByNickname(nickname).get();
+        //  if(!memberService.confirmNickname(nickname))
+        //  throw new GeneralException(Code.CONFLICT, "없는 닉네임입니다");
+
+        //Member member = memberRepository.findByNickname(nickname).get();
         Rocket rocket = findByCode(code);
 
         // 탑승객 저장
@@ -127,6 +132,7 @@ public class RocketService {
                 .userId(member.getId())
                 .build();
         passengerRepository.save(newPassenger);
+        passengers.add(newPassenger);
 
         return RocketResponseDto.of(this.getPassengerList(rocket));
     }
