@@ -13,6 +13,7 @@ import com.example.springbootboilerplate.rocket.domain.Rocket;
 import com.example.springbootboilerplate.upload.S3FileUploadService;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -68,13 +69,22 @@ public class MemoService {
             ));
         }
 
-        // 도착 날짜 String to LocalDateTime
+        // 로켓 생성 일자
+        LocalDateTime createAt = rocketEntity.getCreatedAt();
+        DateTimeFormatter createAtFormatter = DateTimeFormatter.ofPattern("yyyy. MM. dd");
+        String formattedCreateAt = createAt.format(createAtFormatter);
+
+        // 로켓 도착 일자
         LocalDateTime arrivedAt = rocketEntity.getFinalArrival();
+        DateTimeFormatter arrivedFormatter = DateTimeFormatter.ofPattern("dd");
+        String formattedArrivedAt = arrivedAt.format(arrivedFormatter);
+
+        // 생성 일자 + 도착 일자 = 기간
+        String period = formattedCreateAt + " - " + formattedArrivedAt;
 
         return new MemoListResponseDto(
             rocketEntity.getRocketName(),
-            rocketEntity.getCreatedAt(),
-            arrivedAt,
+            period,
             memoResponseDtos
         );
     }
