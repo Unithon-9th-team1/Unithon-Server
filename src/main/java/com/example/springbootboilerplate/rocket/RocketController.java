@@ -52,11 +52,11 @@ public class RocketController {
 
     /**
      * 유저 로켓 목록 조회 API - 정연
-     * [GET] /rocket?nickname=(유저닉네임)
+     * [GET] /rocket?uuid=(유저UUID)
      */
     // uuid 로 바궈야하는것인지
     @GetMapping("/rockets")
-    public DataResponseDto<Object> getMyRockets(@RequestParam(required = false) String nickname) {
-        return DataResponseDto.of(Code.OK, rocketService.getUserRockets(nickname));
+    public DataResponseDto<Object> getMyRockets(@RequestParam(required = false) String uuid) {
+        return DataResponseDto.of(Code.OK, rocketService.getUserRockets(uuid));
     }
 }
