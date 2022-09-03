@@ -35,15 +35,11 @@ public class RocketController {
     }
 
     // 로켓 탑승하기
-//    @PostMapping("/rocket-boarding")
-//    public RocketResponseDto boardRocket(@RequestBody RocketBoardRequestDto rocketBoardRequest){
-//        String code = rocketBoardRequest.getCode();
-//        String nickname = rocketBoardRequest.getNickname();
-//        if(rocketService.confirmCode(code))
-//            throw new GeneralException(Code.CONFLICT, "없는 코드번호입니다");
-//
-//        if(memberService.confirmNickname(nickname))
-//            throw new GeneralException(Code.CONFLICT, "없는 닉네임입니다");
-////        return rocketService.boardRocket(rocketBoardRequest);
-//    }
+    @PostMapping("/rocket-boarding")
+    public DataResponseDto<RocketResponseDto> boardRocket(@RequestBody RocketBoardRequestDto rocketBoardRequest){
+        String code = rocketBoardRequest.getCode();
+        String nickname = rocketBoardRequest.getNickname();
+        rocketService.boardRocket(rocketBoardRequest);
+        return DataResponseDto.of(Code.CREATED, rocketService.boardRocket(rocketBoardRequest));
+    }
 }
