@@ -10,14 +10,18 @@ import java.util.List;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RocketResponseDto {
+    private Long rocketId;
+    private String rocketName;
     private List<String> passengers;
     private String arrivalEnd;
+    private String boardingStatus;
 
-    public static RocketResponseDto rocketListResponse(Long rocketId, String nickname, String arrivalEnd) {
+    public static RocketResponseDto rocketListResponse(Long rocketId, String rocketName, String arrivalEnd, Integer boardingStatus) {
         return RocketResponseDto.builder()
             .rocketId(rocketId)
-            .nickname(nickname)
+            .rocketName(rocketName)
             .arrivalEnd(arrivalEnd)
+            .boardingStatus(boardingStatus==1 ? "탑승대기" : ((boardingStatus == 2 ? "탑승완료" : "항해완료")))
             .build();
     }
 

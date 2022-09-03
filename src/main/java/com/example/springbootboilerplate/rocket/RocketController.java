@@ -9,7 +9,6 @@ import com.example.springbootboilerplate.rocket.dto.RocketResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 
 @RestController
 @RequiredArgsConstructor
@@ -54,8 +53,9 @@ public class RocketController {
      * 유저 로켓 목록 조회 API - 정연
      * [GET] /rocket?nickname=(유저닉네임)
      */
+    // uuid 로 바궈야하는것인지
     @GetMapping("/rocket")
-    public DataResponseDto<Object> getMyRockets(@RequestParam String nickname) {
+    public DataResponseDto<Object> getMyRockets(@RequestParam(required = false) String nickname) {
         return DataResponseDto.of(Code.OK, rocketService.getMyRockets(nickname));
     }
 }

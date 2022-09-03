@@ -156,8 +156,8 @@ public class RocketService {
             rocketResponseDtos.add(RocketResponseDto.rocketListResponse(
                 rocket.getId(),
                 rocket.getRocketName(),
-                rocket.getArrivalEnd()
-                )
+                rocket.getArrivalEnd(),
+                rocket.getBoardingStatus())
             );
         }
 
