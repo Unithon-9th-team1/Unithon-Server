@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,5 +44,21 @@ public class MemoController {
             throw e;
         }
     }
+
+    /**
+     * 메모 목록 조회 API - 정연
+     * [POST] /memo?rocket='로켓식별문자열'
+     */
+    @GetMapping("")
+    public DataResponseDto<Object> getMemos(@RequestParam String rocket) {
+        // 로켓 이름으로 엔티티 조회해서 존재 여부 확인
+        return null;
+    }
+
+    @GetMapping("/test")
+    public DataResponseDto<Object> test() {
+        return DataResponseDto.of("테스트");
+    }
+
 
 }
